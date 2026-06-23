@@ -12,5 +12,11 @@ services:
       HOST: 0.0.0.0
       PORT: 3000
       NITRO_PRESET: node_server
-    ports:
-      - "3005:3000"
+    expose:
+      - "3000"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
