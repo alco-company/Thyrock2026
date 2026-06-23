@@ -31,19 +31,12 @@ The Vite config also force-enables `nitro` for self-hosting, because `@lovable.d
 
 ## Domain routing
 
-The container listens on port `3000` on the internal Docker network.
+The container listens internally on port `3000` and is exposed on the Docker host as port `3005`.
 
-For Nginx Proxy Manager on the same Docker host:
+For Nginx Proxy Manager:
 
-- connect both containers to the same external Docker network
-- use `thyrock-kalender` as the upstream hostname
-- use port `3000`
-
-Create the shared network once:
-
-```bash
-docker network create npm_proxy
-```
+- use the Docker host IP or server hostname as upstream
+- use port `3005`
 
 ## Runtime command
 
