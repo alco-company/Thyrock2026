@@ -2,6 +2,9 @@ FROM oven/bun:1.2.18-alpine AS builder
 
 WORKDIR /app
 
+ARG NITRO_PRESET=node-server
+ENV NITRO_PRESET=${NITRO_PRESET}
+
 COPY package.json bun.lock bunfig.toml ./
 RUN bun install --frozen-lockfile
 
@@ -15,6 +18,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
+ENV NITRO_PRESET=node-server
 
 COPY --from=builder /app/.output ./.output
 
