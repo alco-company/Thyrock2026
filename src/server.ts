@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { buildIcs, getSelectedItems } from "./lib/program";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -40,6 +41,24 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      if (url.pathname === "/download.ics") {
+        const ids = (url.searchParams.get("ids") ?? "")
+          .split(",")
+          .map((id) => id.trim())
+          .filter(Boolean);
+        const ics = buildIcs(getSelectedItems(ids));
+
+        return new Response(ics, {
+          status: 200,
+          headers: {
+            "content-type": "text/calendar; charset=utf-8",
+            "content-disposition": 'attachment; filename="thyrock-2026.ics"',
+            "cache-control": "no-store",
+          },
+        });
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
