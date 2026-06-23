@@ -34,9 +34,6 @@ function Index() {
   const isInAppBrowser =
     typeof navigator !== "undefined" &&
     /FBAN|FBAV|Instagram|Messenger|Line|Twitter/i.test(navigator.userAgent);
-  const isAndroid =
-    typeof navigator !== "undefined" &&
-    /Android/i.test(navigator.userAgent);
   const showInAppNotice = isInAppBrowser && !inAppNoticeDismissed;
 
   const closeDownloadGuide = () => {
@@ -50,18 +47,6 @@ function Index() {
     } catch {
       setCopyState("error");
     }
-  };
-
-  const openDirectlyInBrowser = () => {
-    const currentUrl = window.location.href;
-
-    if (isAndroid) {
-      const withoutProtocol = currentUrl.replace(/^https?:\/\//, "");
-      window.location.href = `intent://${withoutProtocol}#Intent;scheme=https;package=com.android.chrome;end`;
-      return;
-    }
-
-    window.open(currentUrl, "_blank", "noopener,noreferrer");
   };
 
   const downloadIcs = () => {
@@ -85,8 +70,8 @@ function Index() {
                     Facebooks browser kan blokere download af kalenderfilen
                   </h2>
                   <p className="mt-3 text-sm text-foreground/85 sm:text-base">
-                    Åbn siden direkte i Safari eller Chrome før du downloader. Hvis knappen herunder ikke virker,
-                    så brug menuen i Facebook og vælg “Åbn i browser”.
+                    Åbn siden direkte i Safari eller Chrome før du downloader. Kopiér linket herunder,
+                    eller brug menuen i Facebook og vælg “Åbn i browser”.
                   </p>
                 </div>
                 <button
@@ -99,14 +84,8 @@ function Index() {
 
               <div className="mt-5 flex flex-wrap gap-3">
                 <button
-                  onClick={openDirectlyInBrowser}
-                  className="font-display inline-flex rounded-full bg-primary px-5 py-3 text-sm uppercase tracking-wider text-primary-foreground transition hover:opacity-95"
-                >
-                  Åbn direkte i browser
-                </button>
-                <button
                   onClick={copyCurrentLink}
-                  className="font-display inline-flex rounded-full border border-border px-5 py-3 text-sm uppercase tracking-wider text-foreground transition hover:bg-surface-2"
+                  className="font-display inline-flex rounded-full bg-primary px-5 py-3 text-sm uppercase tracking-wider text-primary-foreground transition hover:opacity-95"
                 >
                   Kopiér link
                 </button>
