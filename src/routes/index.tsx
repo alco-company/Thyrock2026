@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { getSelectedItems, PROGRAM, type Stage } from "../lib/program";
+import facebookTop from "../../facebooktop.png?url";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -86,31 +87,25 @@ function Index() {
                 </button>
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-3">
+              <div className="mt-5 overflow-hidden rounded-3xl border border-border bg-white shadow-lg">
+                <img
+                  src={facebookTop}
+                  alt="Facebook-menu med de tre prikker øverst til højre"
+                  className="block w-full"
+                />
+              </div>
+
+              <div className="mt-4 text-center text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
+                eller
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-3">
                 <button
                   onClick={copyCurrentLink}
                   className="font-display inline-flex rounded-full bg-primary px-5 py-3 text-sm uppercase tracking-wider text-primary-foreground transition hover:opacity-95"
                 >
                   Kopiér link
                 </button>
-              </div>
-
-              <div className="mt-5 overflow-hidden rounded-3xl border border-border bg-white text-black shadow-lg">
-                <div className="relative flex items-center justify-between px-4 py-4 sm:px-6">
-                  <div className="text-4xl leading-none">×</div>
-                  <div className="min-w-0 flex-1 px-4 text-center">
-                    <div className="truncate text-2xl font-semibold sm:text-3xl">thyrock2026.alco.company</div>
-                    <div className="text-xl text-neutral-500 sm:text-2xl">Facebook</div>
-                  </div>
-                  <div className="text-4xl leading-none tracking-[0.35em]">...</div>
-
-                  <div className="pointer-events-none absolute right-4 top-16 flex flex-col items-center text-[var(--hot)] sm:right-6">
-                    <div className="text-3xl leading-none">↑</div>
-                    <div className="mt-1 rounded-full bg-[var(--hot)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white sm:text-[11px]">
-                      Tryk her
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <p className="mt-3 text-xs text-muted-foreground">
