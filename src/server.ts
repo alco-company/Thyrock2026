@@ -42,7 +42,7 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
-      if (url.pathname === "/download.ics") {
+      if (url.pathname === "/download-ics" || url.pathname === "/download.ics") {
         const ids = (url.searchParams.get("ids") ?? "")
           .split(",")
           .map((id) => id.trim())

@@ -13,13 +13,15 @@ function Index() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [downloadGuideOpen, setDownloadGuideOpen] = useState(false);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const [inAppNoticeDismissed, setInAppNoticeDismissed] = useState(false);
 
   const day = PROGRAM.find((d) => d.key === activeDay)!;
   const selectedList = useMemo(() => getSelectedItems(selected), [selected]);
   const downloadHref = useMemo(() => {
     const ids = Array.from(selected);
     if (ids.length === 0) return "#";
-    return `/download.ics?ids=${encodeURIComponent(ids.join(","))}`;
+    return `/download-ics?ids=${encodeURIComponent(ids.join(","))}`;
   }, [selected]);
 
   const toggle = (id: string) =>
@@ -32,9 +34,34 @@ function Index() {
   const isInAppBrowser =
     typeof navigator !== "undefined" &&
     /FBAN|FBAV|Instagram|Messenger|Line|Twitter/i.test(navigator.userAgent);
+  const isAndroid =
+    typeof navigator !== "undefined" &&
+    /Android/i.test(navigator.userAgent);
+  const showInAppNotice = isInAppBrowser && !inAppNoticeDismissed;
 
   const closeDownloadGuide = () => {
     setDownloadGuideOpen(false);
+  };
+
+  const copyCurrentLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    }
+  };
+
+  const openDirectlyInBrowser = () => {
+    const currentUrl = window.location.href;
+
+    if (isAndroid) {
+      const withoutProtocol = currentUrl.replace(/^https?:\/\//, "");
+      window.location.href = `intent://${withoutProtocol}#Intent;scheme=https;package=com.android.chrome;end`;
+      return;
+    }
+
+    window.open(currentUrl, "_blank", "noopener,noreferrer");
   };
 
   const downloadIcs = () => {
@@ -49,6 +76,49 @@ function Index() {
       <header className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 -z-10 noise-bg opacity-90" />
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-10 sm:pt-20 sm:pb-14">
+          {showInAppNotice && (
+            <div className="mb-8 rounded-3xl border border-[var(--hot)]/30 bg-[var(--hot)]/10 p-5">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="max-w-2xl">
+                  <div className="text-xs uppercase tracking-[0.25em] text-[var(--hot)]">Åbn direkte</div>
+                  <h2 className="font-display mt-2 text-2xl leading-tight sm:text-3xl">
+                    Facebooks browser kan blokere download af kalenderfilen
+                  </h2>
+                  <p className="mt-3 text-sm text-foreground/85 sm:text-base">
+                    Åbn siden direkte i Safari eller Chrome før du downloader. Hvis knappen herunder ikke virker,
+                    så brug menuen i Facebook og vælg “Åbn i browser”.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setInAppNoticeDismissed(true)}
+                  className="rounded-full border border-border px-3 py-1 text-sm hover:bg-surface-2"
+                >
+                  Luk
+                </button>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-3">
+                <button
+                  onClick={openDirectlyInBrowser}
+                  className="font-display inline-flex rounded-full bg-primary px-5 py-3 text-sm uppercase tracking-wider text-primary-foreground transition hover:opacity-95"
+                >
+                  Åbn direkte i browser
+                </button>
+                <button
+                  onClick={copyCurrentLink}
+                  className="font-display inline-flex rounded-full border border-border px-5 py-3 text-sm uppercase tracking-wider text-foreground transition hover:bg-surface-2"
+                >
+                  Kopiér link
+                </button>
+              </div>
+
+              <p className="mt-3 text-xs text-muted-foreground">
+                {copyState === "copied" && "Linket er kopieret. Du kan nu indsætte det i Safari eller Chrome."}
+                {copyState === "error" && "Linket kunne ikke kopieres automatisk. Brug Facebook-menuen og vælg “Åbn i browser”."}
+              </p>
+            </div>
+          )}
+
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground">
             <span className="inline-block h-2 w-2 rounded-full bg-[var(--hot)]" />
             Thy Rock · 26.–27. juni 2026

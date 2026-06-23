@@ -10,37 +10,54 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DownloadIcsRouteImport } from './routes/download-ics'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DownloadIcsRoute = DownloadIcsRouteImport.update({
+  id: '/download-ics',
+  path: '/download-ics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/download-ics': typeof DownloadIcsRoute
   '/': typeof IndexRoute
 }
 export interface FileRoutesByTo {
+  '/download-ics': typeof DownloadIcsRoute
   '/': typeof IndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/download-ics': typeof DownloadIcsRoute
   '/': typeof IndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/download-ics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/download-ics'
+  id: '__root__' | '/' | '/download-ics'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  DownloadIcsRoute: typeof DownloadIcsRoute
   IndexRoute: typeof IndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/download-ics': {
+      id: '/download-ics'
+      path: '/download-ics'
+      fullPath: '/download-ics'
+      preLoaderRoute: typeof DownloadIcsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -52,6 +69,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  DownloadIcsRoute: DownloadIcsRoute,
   IndexRoute: IndexRoute,
 }
 export const routeTree = rootRouteImport
