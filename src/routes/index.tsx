@@ -67,7 +67,7 @@ function Index() {
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-10 sm:pt-20 sm:pb-14">
           {showInAppNotice && (
             <div className="mb-8 rounded-3xl border border-[var(--hot)]/30 bg-[var(--hot)]/10 p-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="flex flex-wrap items-start gap-4">
                 <div className="max-w-2xl">
                   <div className="text-xs uppercase tracking-[0.25em] text-[var(--hot)]">Åbn direkte</div>
                   <h2 className="font-display mt-2 text-2xl leading-tight sm:text-3xl">
@@ -79,20 +79,20 @@ function Index() {
                     eller “Åbn i browser”.
                   </p>
                 </div>
-                <button
-                  onClick={() => setInAppNoticeDismissed(true)}
-                  className="rounded-full border border-border px-3 py-1 text-sm hover:bg-surface-2"
-                >
-                  Luk
-                </button>
               </div>
 
-              <div className="mt-5 overflow-hidden rounded-3xl border border-border bg-white shadow-lg">
+              <div className="relative mt-5 overflow-hidden rounded-3xl border border-border bg-white shadow-lg">
                 <img
                   src={facebookTop}
                   alt="Facebook-menu med de tre prikker øverst til højre"
                   className="block w-full"
                 />
+                <div className="pointer-events-none absolute right-6 top-3 flex flex-col items-center text-[var(--hot)] sm:right-8 sm:top-4">
+                  <div className="text-3xl leading-none">↓</div>
+                  <div className="mt-1 rounded-full bg-[var(--hot)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white sm:text-[11px]">
+                    Tryk her
+                  </div>
+                </div>
               </div>
 
               <div className="mt-4 text-center text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
@@ -112,6 +112,15 @@ function Index() {
                 {copyState === "copied" && "Linket er kopieret. Du kan nu indsætte det i Safari eller Chrome."}
                 {copyState === "error" && "Linket kunne ikke kopieres automatisk. Tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser” eller “Åbn i browser”."}
               </p>
+
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => setInAppNoticeDismissed(true)}
+                  className="rounded-full border border-border px-4 py-2 text-sm hover:bg-surface-2"
+                >
+                  Luk
+                </button>
+              </div>
             </div>
           )}
 
