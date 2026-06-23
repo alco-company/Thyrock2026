@@ -2,7 +2,7 @@
 
 This project is prepared to run in Portainer as a Dockerized Node app.
 
-The Docker setup forces `NITRO_PRESET=node-server` during build, so TanStack Start outputs a deployable `.output/` folder for Node hosting.
+The Docker setup forces `NITRO_PRESET=node_server` during build, so TanStack Start outputs a deployable `.output/` folder for Node hosting.
 
 ## Files added
 

@@ -2,14 +2,19 @@ FROM oven/bun:1.2.18-alpine AS builder
 
 WORKDIR /app
 
-ARG NITRO_PRESET=node-server
+ARG NITRO_PRESET=node_server
 ENV NITRO_PRESET=${NITRO_PRESET}
 
 COPY package.json bun.lock bunfig.toml ./
 RUN bun install --frozen-lockfile
 
 COPY . .
-RUN bun run build
+RUN bun run build && \
+  test -d /app/.output || \
+  (echo "Expected /app/.output after build, but it was not created." && \
+  echo "Top-level build artifacts:" && \
+  find /app -maxdepth 2 \( -name .output -o -name .vinxi -o -name dist \) -print && \
+  exit 1)
 
 FROM node:20-alpine AS runner
 
@@ -18,7 +23,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
-ENV NITRO_PRESET=node-server
+ENV NITRO_PRESET=node_server
 
 COPY --from=builder /app/.output ./.output
 

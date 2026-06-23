@@ -5,12 +5,12 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NITRO_PRESET: node-server
+        NITRO_PRESET: node_server
     restart: unless-stopped
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 3000
-      NITRO_PRESET: node-server
+      NITRO_PRESET: node_server
     ports:
       - "127.0.0.1:3000:3000"
