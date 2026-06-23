@@ -211,6 +211,7 @@ function Index() {
   const [activeDay, setActiveDay] = useState<"fri" | "sat">("fri");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [downloadGuideOpen, setDownloadGuideOpen] = useState(false);
 
   const day = PROGRAM.find((d) => d.key === activeDay)!;
 
@@ -244,6 +245,7 @@ function Index() {
     a.download = "thyrock-2026.ics";
     a.click();
     URL.revokeObjectURL(url);
+    setDownloadGuideOpen(true);
   };
 
   return (
@@ -370,6 +372,55 @@ function Index() {
               </p>
             </div>
           </aside>
+        </div>
+      )}
+
+      {downloadGuideOpen && (
+        <div className="fixed inset-0 z-[60]">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setDownloadGuideOpen(false)} />
+          <div className="absolute inset-x-4 top-1/2 mx-auto w-auto max-w-2xl -translate-y-1/2 rounded-3xl border border-border bg-surface shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
+              <div>
+                <div className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Downloadet</div>
+                <h3 className="font-display mt-2 text-2xl leading-tight">Sådan får du kalenderen ind</h3>
+              </div>
+              <button
+                onClick={() => setDownloadGuideOpen(false)}
+                className="rounded-full border border-border px-3 py-1 text-sm hover:bg-surface-2"
+              >
+                Luk
+              </button>
+            </div>
+
+            <div className="grid gap-4 px-5 py-5 sm:px-6 sm:py-6 md:grid-cols-3">
+              <section className="rounded-2xl border border-border bg-surface-2 p-4">
+                <h4 className="font-display text-lg">iPhone / Apple Kalender</h4>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Åbn filen fra Downloads og vælg Kalender. Bekræft derefter at du vil importere begivenhederne.
+                </p>
+              </section>
+
+              <section className="rounded-2xl border border-border bg-surface-2 p-4">
+                <h4 className="font-display text-lg">Google Kalender</h4>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Åbn Google Kalender på computer, vælg Indstillinger, gå til Importér og upload filen
+                  <span className="font-medium text-foreground"> thyrock-2026.ics</span>.
+                </p>
+              </section>
+
+              <section className="rounded-2xl border border-border bg-surface-2 p-4">
+                <h4 className="font-display text-lg">Outlook</h4>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Åbn kalenderen i Outlook og vælg import af kalenderfil. Vælg derefter den downloadede
+                  <span className="font-medium text-foreground"> .ics</span>-fil.
+                </p>
+              </section>
+            </div>
+
+            <div className="border-t border-border px-5 py-4 text-center text-xs text-muted-foreground sm:px-6">
+              Hvis filen ikke åbner automatisk, finder du den normalt i din mappe til downloads.
+            </div>
+          </div>
         </div>
       )}
 
