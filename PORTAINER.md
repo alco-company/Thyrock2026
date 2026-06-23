@@ -31,13 +31,19 @@ The Vite config also force-enables `nitro` for self-hosting, because `@lovable.d
 
 ## Domain routing
 
-The container listens on port `3000`.
+The container listens on port `3000` on the internal Docker network.
 
-Point your reverse proxy or Virtualmin proxy pass to:
+For Nginx Proxy Manager on the same Docker host:
 
-- `http://127.0.0.1:3000`
+- connect both containers to the same external Docker network
+- use `thyrock-kalender` as the upstream hostname
+- use port `3000`
 
-If SSL already terminates in Virtualmin, keep the container on plain HTTP internally.
+Create the shared network once:
+
+```bash
+docker network create npm_proxy
+```
 
 ## Runtime command
 
