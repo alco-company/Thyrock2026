@@ -34,7 +34,10 @@ function Index() {
   const isInAppBrowser =
     typeof navigator !== "undefined" &&
     /FBAN|FBAV|Instagram|Messenger|Line|Twitter/i.test(navigator.userAgent);
-  const showInAppNotice = isInAppBrowser && !inAppNoticeDismissed;
+  const isMobileDevice =
+    typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  const showInAppNotice = isInAppBrowser && isMobileDevice && !inAppNoticeDismissed;
 
   const closeDownloadGuide = () => {
     setDownloadGuideOpen(false);
@@ -71,7 +74,8 @@ function Index() {
                   </h2>
                   <p className="mt-3 text-sm text-foreground/85 sm:text-base">
                     Åbn siden direkte i Safari eller Chrome før du downloader. Kopiér linket herunder,
-                    eller brug menuen i Facebook og vælg “Åbn i browser”.
+                    eller tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser”
+                    eller “Åbn i browser”.
                   </p>
                 </div>
                 <button
@@ -93,7 +97,7 @@ function Index() {
 
               <p className="mt-3 text-xs text-muted-foreground">
                 {copyState === "copied" && "Linket er kopieret. Du kan nu indsætte det i Safari eller Chrome."}
-                {copyState === "error" && "Linket kunne ikke kopieres automatisk. Brug Facebook-menuen og vælg “Åbn i browser”."}
+                {copyState === "error" && "Linket kunne ikke kopieres automatisk. Tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser” eller “Åbn i browser”."}
               </p>
             </div>
           )}
