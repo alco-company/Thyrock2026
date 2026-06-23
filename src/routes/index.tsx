@@ -73,11 +73,6 @@ function Index() {
                   <h2 className="font-display mt-2 text-2xl leading-tight sm:text-3xl">
                     Facebooks browser kan blokere download af kalenderfilen
                   </h2>
-                  <p className="mt-3 text-sm text-foreground/85 sm:text-base">
-                    Åbn siden direkte i Safari eller Chrome før du downloader. Kopiér linket herunder,
-                    eller tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser”
-                    eller “Åbn i browser”.
-                  </p>
                 </div>
               </div>
 
@@ -87,13 +82,13 @@ function Index() {
                   alt="Facebook-menu med de tre prikker øverst til højre"
                   className="block w-full"
                 />
-                <div className="pointer-events-none absolute right-6 top-3 flex flex-col items-center text-[var(--hot)] sm:right-8 sm:top-4">
-                  <div className="text-3xl leading-none">↓</div>
-                  <div className="mt-1 rounded-full bg-[var(--hot)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white sm:text-[11px]">
-                    Tryk her
-                  </div>
-                </div>
               </div>
+
+              <p className="mt-5 text-sm text-foreground/85 sm:text-base">
+                Åbn siden direkte i Safari eller Chrome før du downloader. Kopiér linket herunder,
+                eller tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser”
+                eller “Åbn i browser”.
+              </p>
 
               <div className="mt-4 text-center text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
                 eller
