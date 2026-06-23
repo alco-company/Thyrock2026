@@ -212,6 +212,7 @@ function Index() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [downloadGuideOpen, setDownloadGuideOpen] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   const day = PROGRAM.find((d) => d.key === activeDay)!;
 
@@ -236,15 +237,29 @@ function Index() {
       return next;
     });
 
+  const isInAppBrowser =
+    typeof navigator !== "undefined" &&
+    /FBAN|FBAV|Instagram|Messenger|Line|Twitter/i.test(navigator.userAgent);
+
+  const closeDownloadGuide = () => {
+    setDownloadGuideOpen(false);
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(null);
+  };
+
   const downloadIcs = () => {
     const ics = buildIcs(selectedList);
     const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(url);
     const a = document.createElement("a");
     a.href = url;
     a.download = "thyrock-2026.ics";
+    a.rel = "noopener";
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    a.remove();
     setDownloadGuideOpen(true);
   };
 
@@ -377,7 +392,7 @@ function Index() {
 
       {downloadGuideOpen && (
         <div className="fixed inset-0 z-[60]">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setDownloadGuideOpen(false)} />
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={closeDownloadGuide} />
           <div className="absolute inset-x-4 top-1/2 mx-auto w-auto max-w-2xl -translate-y-1/2 rounded-3xl border border-border bg-surface shadow-2xl">
             <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
               <div>
@@ -385,12 +400,19 @@ function Index() {
                 <h3 className="font-display mt-2 text-2xl leading-tight">Sådan får du kalenderen ind</h3>
               </div>
               <button
-                onClick={() => setDownloadGuideOpen(false)}
+                onClick={closeDownloadGuide}
                 className="rounded-full border border-border px-3 py-1 text-sm hover:bg-surface-2"
               >
                 Luk
               </button>
             </div>
+
+            {isInAppBrowser && (
+              <div className="border-b border-border bg-[var(--hot)]/10 px-5 py-4 text-sm text-foreground sm:px-6">
+                Facebooks browser kan blokere downloads. Hvis filen ikke kom ned, så prøv knappen herunder
+                eller åbn siden i Safari eller Chrome.
+              </div>
+            )}
 
             <div className="grid gap-4 px-5 py-5 sm:px-6 sm:py-6 md:grid-cols-3">
               <section className="rounded-2xl border border-border bg-surface-2 p-4">
@@ -417,8 +439,19 @@ function Index() {
               </section>
             </div>
 
-            <div className="border-t border-border px-5 py-4 text-center text-xs text-muted-foreground sm:px-6">
-              Hvis filen ikke åbner automatisk, finder du den normalt i din mappe til downloads.
+            <div className="border-t border-border px-5 py-4 sm:px-6">
+              {downloadUrl && (
+                <a
+                  href={downloadUrl}
+                  download="thyrock-2026.ics"
+                  className="font-display mb-3 inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 text-sm uppercase tracking-wider text-primary-foreground transition hover:opacity-95"
+                >
+                  Tryk her hvis download ikke startede
+                </a>
+              )}
+              <p className="text-center text-xs text-muted-foreground">
+                Hvis filen ikke åbner automatisk, finder du den normalt i din mappe til downloads.
+              </p>
             </div>
           </div>
         </div>
