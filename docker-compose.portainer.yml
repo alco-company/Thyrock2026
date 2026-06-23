@@ -1,0 +1,13 @@
+services:
+  thyrock-kalender:
+    container_name: thyrock-kalender
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+    ports:
+      - "127.0.0.1:3000:3000"
