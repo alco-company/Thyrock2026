@@ -3,6 +3,7 @@
 This project is prepared to run in Portainer as a Dockerized Node app.
 
 The Docker setup forces `NITRO_PRESET=node_server` during build, so TanStack Start outputs a deployable `.output/` folder for Node hosting.
+The Vite config also force-enables `nitro` for self-hosting, because `@lovable.dev/vite-tanstack-config` otherwise skips Nitro outside Lovable's own deploy context.
 
 ## Files added
 
