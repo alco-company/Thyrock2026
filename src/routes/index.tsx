@@ -14,7 +14,6 @@ function Index() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [downloadGuideOpen, setDownloadGuideOpen] = useState(false);
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const [inAppNoticeDismissed, setInAppNoticeDismissed] = useState(false);
 
   const day = PROGRAM.find((d) => d.key === activeDay)!;
@@ -44,15 +43,6 @@ function Index() {
     setDownloadGuideOpen(false);
   };
 
-  const copyCurrentLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopyState("copied");
-    } catch {
-      setCopyState("error");
-    }
-  };
-
   const downloadIcs = () => {
     if (selectedList.length === 0) return;
     window.location.href = downloadHref;
@@ -67,16 +57,7 @@ function Index() {
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-10 sm:pt-20 sm:pb-14">
           {showInAppNotice && (
             <div className="mb-8 rounded-3xl border border-[var(--hot)]/30 bg-[var(--hot)]/10 p-5">
-              <div className="flex flex-wrap items-start gap-4">
-                <div className="max-w-2xl">
-                  <div className="text-xs uppercase tracking-[0.25em] text-[var(--hot)]">Åbn direkte</div>
-                  <h2 className="font-display mt-2 text-2xl leading-tight sm:text-3xl">
-                    Facebooks browser kan blokere download af kalenderfilen
-                  </h2>
-                </div>
-              </div>
-
-              <div className="relative mt-5 overflow-hidden rounded-3xl border border-border bg-white shadow-lg">
+              <div className="overflow-hidden rounded-3xl border border-border bg-white shadow-lg">
                 <img
                   src={facebookTop}
                   alt="Facebook-menu med de tre prikker øverst til højre"
@@ -85,27 +66,8 @@ function Index() {
               </div>
 
               <p className="mt-5 text-sm text-foreground/85 sm:text-base">
-                Åbn siden direkte i Safari eller Chrome før du downloader. Kopiér linket herunder,
-                eller tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser”
-                eller “Åbn i browser”.
-              </p>
-
-              <div className="mt-4 text-center text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
-                eller
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  onClick={copyCurrentLink}
-                  className="font-display inline-flex rounded-full bg-primary px-5 py-3 text-sm uppercase tracking-wider text-primary-foreground transition hover:opacity-95"
-                >
-                  Kopiér link
-                </button>
-              </div>
-
-              <p className="mt-3 text-xs text-muted-foreground">
-                {copyState === "copied" && "Linket er kopieret. Du kan nu indsætte det i Safari eller Chrome."}
-                {copyState === "error" && "Linket kunne ikke kopieres automatisk. Tryk på de tre prikker i topmenuen i Facebook og vælg “Åbn i ekstern browser” eller “Åbn i browser”."}
+                For at det virker på denne enhed, skal du trykke på de 3 prikker som vist på
+                billedet og vælge “Åbn i ekstern browser”.
               </p>
 
               <div className="mt-4 flex justify-center">
